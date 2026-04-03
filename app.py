@@ -7,6 +7,7 @@ from PIL import Image
 import pdfplumber
 import fitz  # PyMuPDF
 from openai import OpenAI
+import os
 
 # =========================
 # CONFIG
@@ -18,7 +19,12 @@ st.set_page_config(
     layout="wide"
 )
 
-client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+api_key = os.getenv("OPENAI_API_KEY")
+
+if not api_key:
+    raise ValueError("OPENAI_API_KEY n'a pas été trouvée dans les variables d'environnement.")
+
+client = OpenAI(api_key=api_key)
 
 PROMPT_INSTRUCTIONS = """
 Tu es un assistant spécialisé dans l'extraction de données à partir de factures.
